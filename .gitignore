@@ -1,0 +1,18 @@
+# Compiled Java classes and jars
+target/
+*.class
+
+# Node / React
+node_modules/
+dist/
+.env.local
+
+# IDEs & System
+.DS_Store
+.idea/
+*.iml
+.vscode/
+*.log
+
+# Docker
+.docker/

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EscrowFlow — Milestone-Based Escrow Tracking Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app" class="app-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div class="brand-text">
+                    <h2>EscrowFlow</h2>
+                    <span>Contract & Escrow Portal</span>
+                </div>
+            </div>
+
+            <div class="student-attribution">
+                <span class="attr-label">Project Author</span>
+                <p class="attr-name">Gade Vinay</p>
+                <p class="attr-info">Roll: 24EG105P38 • CSE-P</p>
+                <p class="attr-univ">Anurag University</p>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="milestones">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    <span>Contracts & Milestones</span>
+                </button>
+                <button class="nav-item" data-tab="jobs">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>Job Board & Bids</span>
+                </button>
+                <button class="nav-item" data-tab="ledger">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <span>Escrow Ledger & Audit</span>
+                </button>
+                <button class="nav-item" data-tab="notifications">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span>Alerts & Notifications</span>
+                    <span id="notif-badge" class="badge-count hidden">0</span>
+                </button>
+                <button class="nav-item" data-tab="admin">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span>Platform Integrity (Admin)</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="core-principle">
+                    <small>Core Architecture Guarantee:</small>
+                    <p>"State-Verified Fund Release: Funds move only upon verified client milestone approval."</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN VIEW AREA -->
+        <main class="main-content">
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h1 id="page-title">Contracts & Milestones</h1>
+                    <span class="sub-subtitle" id="page-subtitle">Real-time checkpoint verification and fund escrow tracking</span>
+                </div>
+
+                <div class="header-right">
+                    <!-- Quick Demo Role Switcher -->
+                    <div class="role-switcher-box">
+                        <label>Demo Role Switcher:</label>
+                        <select id="role-selector">
+                            <option value="client@escrowflow.com">Client: Acme Corp ($5,000 Wallet)</option>
+                            <option value="freelancer@escrowflow.com">Freelancer: Alex Dev ($1,300 Earned)</option>
+                            <option value="admin@escrowflow.com">Admin: Gade Vinay (Platform Auditor)</option>
+                        </select>
+                    </div>
+
+                    <!-- User Pill -->
+                    <div class="user-pill">
+                        <div class="user-avatar" id="user-avatar">C</div>
+                        <div class="user-info">
+                            <span class="user-name" id="user-name">Acme Corp</span>
+                            <span class="user-role-badge badge-client" id="user-role-badge">CLIENT</span>
+                        </div>
+                    </div>
+
+                    <!-- Balance Pill -->
+                    <div class="balance-card">
+                        <span class="balance-label">Mock Balance</span>
+                        <span class="balance-value" id="user-balance">$5,000.00</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- KPI SUMMARY CARDS -->
+            <section class="summary-cards">
+                <div class="kpi-card">
+                    <div class="kpi-icon indigo">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    <div class="kpi-details">
+                        <span class="kpi-label">Locked in Escrow</span>
+                        <h3 class="kpi-value" id="kpi-escrow">$1,200.00</h3>
+                        <small class="kpi-meta">Protected mock deposits</small>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon green">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <div class="kpi-details">
+                        <span class="kpi-label">Released Payouts</span>
+                        <h3 class="kpi-value" id="kpi-released">$1,300.00</h3>
+                        <small class="kpi-meta">Client-authorized releases</small>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon amber">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <div class="kpi-details">
+                        <span class="kpi-label">Active Milestones</span>
+                        <h3 class="kpi-value" id="kpi-active-milestones">4 Total</h3>
+                        <small class="kpi-meta">1 Submitted, 1 Pending</small>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon purple">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <div class="kpi-details">
+                        <span class="kpi-label">Active Contract</span>
+                        <h3 class="kpi-value" id="kpi-contract-status">Active #1</h3>
+                        <small class="kpi-meta">FinTech Portal</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 1: CONTRACT & MILESTONES -->
+            <section id="tab-milestones" class="tab-content active">
+                <div class="contract-banner">
+                    <div class="contract-info">
+                        <span class="contract-tag">CONTRACT #1 • ACTIVE</span>
+                        <h2 id="contract-title">FinTech Mobile Application & Escrow Portal</h2>
+                        <div class="contract-meta-row">
+                            <span><strong>Client:</strong> <span id="contract-client">Acme Corp</span></span>
+                            <span><strong>Freelancer:</strong> <span id="contract-freelancer">Alex Dev</span></span>
+                            <span><strong>Total Agreed:</strong> <span class="text-bold" id="contract-total">$2,500.00</span></span>
+                            <span><strong>Remaining in Escrow:</strong> <span class="text-emerald" id="contract-escrow-balance">$1,200.00</span></span>
+                        </div>
+                    </div>
+                    <div class="contract-actions">
+                        <button class="btn btn-secondary" onclick="app.showAuditTrail()">View Full Contract Ledger</button>
+                    </div>
+                </div>
+
+                <div class="section-heading-row">
+                    <div>
+                        <h3>Milestone Breakdown (Table 6)</h3>
+                        <p class="section-desc">Each milestone carries scope, amount, status, and authority-verified controls.</p>
+                    </div>
+                    <div class="role-action-hint" id="role-action-hint">
+                        <!-- Dynamic hint based on role -->
+                    </div>
+                </div>
+
+                <div class="milestones-grid" id="milestones-container">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+            <!-- TAB 2: JOB BOARD & BIDS -->
+            <section id="tab-jobs" class="tab-content">
+                <div class="section-heading-row">
+                    <div>
+                        <h3>Freelance Job Marketplace</h3>
+                        <p class="section-desc">Post jobs with structured milestones, submit competitive proposals, or accept bids.</p>
+                    </div>
+                    <button class="btn btn-primary" id="btn-post-job-modal" onclick="app.openPostJobModal()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Post New Job
+                    </button>
+                </div>
+
+                <div class="jobs-grid" id="jobs-container">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+            <!-- TAB 3: ESCROW LEDGER & AUDIT TRAIL -->
+            <section id="tab-ledger" class="tab-content">
+                <div class="ledger-header-box">
+                    <div class="ledger-header-text">
+                        <h3>ACID-Compliant Escrow Ledger & Reconstructable Audit Trail</h3>
+                        <p>Every fund movement is persisted as an immutable row in the transaction ledger. Balances cannot be directly edited.</p>
+                    </div>
+                    <div class="ledger-badge">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <span>Cryptographically & State-Verified</span>
+                    </div>
+                </div>
+
+                <div class="ledger-tables-wrapper">
+                    <div class="table-card">
+                        <div class="table-card-header">
+                            <h4>Financial Transaction Ledger (MySQL)</h4>
+                            <span class="badge-neutral">Immutable Records</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tx ID</th>
+                                        <th>Type</th>
+                                        <th>Milestone Reference</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Amount</th>
+                                        <th>Description</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactions-table-body">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="table-card">
+                        <div class="table-card-header">
+                            <h4>Milestone Status Lifecycle History</h4>
+                            <span class="badge-neutral">Audit Trail</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Event #</th>
+                                        <th>Milestone</th>
+                                        <th>Status Transition</th>
+                                        <th>Acting User</th>
+                                        <th>Role</th>
+                                        <th>Stated Reason / Evidence</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-table-body">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: ALERTS & NOTIFICATIONS -->
+            <section id="tab-notifications" class="tab-content">
+                <div class="section-heading-row">
+                    <div>
+                        <h3>Event-Driven Notification Stream</h3>
+                        <p class="section-desc">Notifications generated on every milestone submission, approval, and dispute event.</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="app.markAllNotificationsRead()">Mark All Read</button>
+                </div>
+
+                <div class="notifications-list" id="notifications-container">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+            <!-- TAB 5: ADMIN PLATFORM INTEGRITY -->
+            <section id="tab-admin" class="tab-content">
+                <div class="admin-notice">
+                    <div class="admin-notice-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div class="admin-notice-content">
+                        <h4>Platform Administrator Oversight Portal</h4>
+                        <p>Monitors contract integrity, audits mock ledger balance consistency, and reviews escalated dispute cases across the platform.</p>
+                    </div>
+                </div>
+
+                <div class="admin-kpi-grid">
+                    <div class="admin-stat-card">
+                        <span>Total Active Contracts</span>
+                        <h2 id="admin-total-contracts">1</h2>
+                    </div>
+                    <div class="admin-stat-card">
+                        <span>Total Ledger Transactions</span>
+                        <h2 id="admin-total-txs">3</h2>
+                    </div>
+                    <div class="admin-stat-card">
+                        <span>Total Platform Users</span>
+                        <h2 id="admin-total-users">3</h2>
+                    </div>
+                    <div class="admin-stat-card">
+                        <span>Platform Integrity Status</span>
+                        <h2 class="text-emerald">VERIFIED (100%)</h2>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-card-header">
+                        <h4>Platform-Wide Contracts Overview</h4>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Contract ID</th>
+                                    <th>Job Title</th>
+                                    <th>Client</th>
+                                    <th>Freelancer</th>
+                                    <th>Total Budget</th>
+                                    <th>Escrow Balance</th>
+                                    <th>Contract Status</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-contracts-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL: SUBMIT DELIVERABLE EVIDENCE -->
+    <div id="modal-submit" class="modal-backdrop hidden">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Submit Milestone Deliverable</h3>
+                <button class="modal-close" onclick="app.closeModal('modal-submit')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-instruction">Provide verifiable deliverable evidence (Git pull request, Figma link, deployment URL, or code notes) for client review.</p>
+                <div class="form-group">
+                    <label>Deliverable Link or Evidence Repository *</label>
+                    <input type="text" id="submit-evidence-input" class="form-control" placeholder="e.g. https://github.com/org/repo/pull/42 or live URL">
+                </div>
+                <div class="form-group">
+                    <label>Notes / Changelog for Client Review *</label>
+                    <textarea id="submit-notes-input" class="form-control" rows="3" placeholder="Summary of completed scope, test results, and instructions for client..."></textarea>
+                </div>
+                <input type="hidden" id="submit-milestone-id">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="app.closeModal('modal-submit')">Cancel</button>
+                <button class="btn btn-primary" onclick="app.executeSubmitDeliverable()">Submit for Review</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: DISPUTE / REQUEST REVISION -->
+    <div id="modal-dispute" class="modal-backdrop hidden">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Request Revision / State Dispute</h3>
+                <button class="modal-close" onclick="app.closeModal('modal-dispute')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-instruction">As specified by EscrowFlow rules, rejecting a submission requires a <strong>mandatory stated reason</strong>. This reason will be permanently recorded in the audit history.</p>
+                <div class="form-group">
+                    <label>Mandatory Stated Reason for Revision *</label>
+                    <textarea id="dispute-reason-input" class="form-control" rows="4" placeholder="Explain specifically what deliverables are missing or require changes..."></textarea>
+                </div>
+                <input type="hidden" id="dispute-milestone-id">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="app.closeModal('modal-dispute')">Cancel</button>
+                <button class="btn btn-danger" onclick="app.executeDisputeMilestone()">Submit Revision Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: POST NEW JOB -->
+    <div id="modal-post-job" class="modal-backdrop hidden">
+        <div class="modal-dialog modal-large">
+            <div class="modal-header">
+                <h3>Post New Freelance Job</h3>
+                <button class="modal-close" onclick="app.closeModal('modal-post-job')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group flex-2">
+                        <label>Job Title *</label>
+                        <input type="text" id="job-title-input" class="form-control" placeholder="e.g. Full-Stack React & Spring Boot Dashboard">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>Budget (USD) *</label>
+                        <input type="number" id="job-budget-input" class="form-control" placeholder="2000" min="50">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select id="job-category-input" class="form-control">
+                        <option value="Fullstack Development">Fullstack Development</option>
+                        <option value="Frontend Development">Frontend Development</option>
+                        <option value="Backend Development">Backend Development</option>
+                        <option value="Cloud Architecture">Cloud Architecture</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Project Scope & Requirements *</label>
+                    <textarea id="job-desc-input" class="form-control" rows="4" placeholder="Describe the project deliverables, technical stack, and acceptance criteria..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="app.closeModal('modal-post-job')">Cancel</button>
+                <button class="btn btn-primary" onclick="app.executePostJob()">Publish Job Listing</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PLACE BID -->
+    <div id="modal-place-bid" class="modal-backdrop hidden">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Submit Project Proposal / Bid</h3>
+                <button class="modal-close" onclick="app.closeModal('modal-place-bid')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label>Proposed Amount ($) *</label>
+                        <input type="number" id="bid-amount-input" class="form-control" placeholder="1800">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>Estimated Timeline *</label>
+                        <input type="text" id="bid-timeline-input" class="form-control" placeholder="e.g. 21 days">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Proposal Pitch & Approach *</label>
+                    <textarea id="bid-pitch-input" class="form-control" rows="3" placeholder="Outline your development plan, previous experience, and proposed milestone decomposition..."></textarea>
+                </div>
+                <input type="hidden" id="bid-job-id">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="app.closeModal('modal-place-bid')">Cancel</button>
+                <button class="btn btn-primary" onclick="app.executeSubmitBid()">Submit Proposal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: MILESTONE STATUS AUDIT TRAIL -->
+    <div id="modal-audit" class="modal-backdrop hidden">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="modal-audit-title">Milestone Status Audit Trail</h3>
+                <button class="modal-close" onclick="app.closeModal('modal-audit')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="audit-timeline" id="audit-timeline-container">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="app.closeModal('modal-audit')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

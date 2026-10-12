@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  escrowflow-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: escrowflow-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/escrowflow?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootpassword
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: escrowflow-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=escrowflow
+      - MYSQL_ROOT_PASSWORD=rootpassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  mysql-data:

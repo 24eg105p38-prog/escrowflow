@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: escrowflow-backend
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /api/jobs
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: JWT_SECRET
+        value: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      - key: JWT_EXPIRATION
+        value: 86400000
