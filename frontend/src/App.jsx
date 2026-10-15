@@ -51,7 +51,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    // Attempt auto-login if token exists or default to demo client
+    // Attempt auto-login if existing token is stored, otherwise present public welcome/login screen
     const existingToken = localStorage.getItem('escrowflow_token');
     if (existingToken) {
       api.getCurrentUser()
@@ -61,10 +61,12 @@ export default function App() {
           loadNotifications();
         })
         .catch(() => {
-          quickDemoLogin('client@escrowflow.com');
+          api.logout();
+          setCurrentUser(null);
         });
     } else {
-      quickDemoLogin('client@escrowflow.com');
+      // Start on clean welcome portal so any external visitor can sign up or log in
+      setCurrentUser(null);
     }
   }, []);
 
