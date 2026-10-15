@@ -90,10 +90,19 @@
                     </div>
 
                     <!-- Balance Pill -->
-                    <div class="balance-card">
+                    <div class="balance-card" id="balance-card-box">
                         <span class="balance-label">Mock Balance</span>
                         <span class="balance-value" id="user-balance">$5,000.00</span>
                     </div>
+
+                    <!-- Auth Actions -->
+                    <button class="btn btn-logout" id="btn-logout" onclick="app.logout()" title="Log Out">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        <span>Log Out</span>
+                    </button>
+                    <button class="btn btn-primary hidden" id="btn-login-trigger" onclick="app.openAuthModal()">
+                        <span>Log In</span>
+                    </button>
                 </div>
             </header>
 
@@ -468,6 +477,78 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="app.closeModal('modal-audit')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTH MODAL (LOGIN & REGISTER) -->
+    <div id="modal-auth" class="modal-backdrop">
+        <div class="modal-dialog auth-modal-dialog">
+            <div class="modal-header">
+                <h3 id="auth-modal-title">Log In to EscrowFlow</h3>
+                <button class="modal-close" onclick="app.closeModal('modal-auth')">&times;</button>
+            </div>
+            <div class="auth-tab-selector">
+                <button class="auth-tab-btn active" id="tab-auth-login" onclick="app.switchAuthMode('login')">Log In</button>
+                <button class="auth-tab-btn" id="tab-auth-register" onclick="app.switchAuthMode('register')">Register</button>
+            </div>
+            <div class="modal-body">
+                <!-- LOGIN FORM -->
+                <form id="form-login" onsubmit="event.preventDefault(); app.submitLogin();">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input class="form-control" type="email" id="login-email" placeholder="client@escrowflow.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input class="form-control" type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px;">Log In</button>
+                </form>
+
+                <!-- REGISTER FORM -->
+                <form id="form-register" class="hidden" onsubmit="event.preventDefault(); app.submitRegister();">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input class="form-control" id="reg-fullname" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input class="form-control" id="reg-username" placeholder="johndoe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input class="form-control" type="email" id="reg-email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input class="form-control" type="password" id="reg-password" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select class="form-control" id="reg-role">
+                            <option value="CLIENT">Client (Fund Escrow & Hire)</option>
+                            <option value="FREELANCER">Freelancer (Work & Earn)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px;">Create Account</button>
+                </form>
+
+                <div class="modal-divider">
+                    <span>OR FAST DEMO LOGIN</span>
+                </div>
+
+                <div class="demo-accounts-pill-list">
+                    <button type="button" class="demo-pill-btn" onclick="app.quickDemo('client@escrowflow.com')">
+                        👔 Acme Corp (Client)
+                    </button>
+                    <button type="button" class="demo-pill-btn" onclick="app.quickDemo('freelancer@escrowflow.com')">
+                        💻 Alex Dev (Freelancer)
+                    </button>
+                    <button type="button" class="demo-pill-btn" onclick="app.quickDemo('admin@escrowflow.com')">
+                        🛡️ Gade Vinay (Admin)
+                    </button>
+                </div>
             </div>
         </div>
     </div>

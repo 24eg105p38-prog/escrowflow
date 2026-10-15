@@ -37,6 +37,22 @@ export const api = {
         return data;
     },
 
+    register: async (userData) => {
+        const res = await fetch(`${API_BASE}/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+        });
+        if (!res.ok) throw await res.json();
+        const data = await res.json();
+        setAuthToken(data.token);
+        return data;
+    },
+
+    logout: () => {
+        setAuthToken(null);
+    },
+
     getCurrentUser: async () => {
         const res = await fetch(`${API_BASE}/auth/me`, { headers: authHeaders() });
         if (!res.ok) throw await res.json();

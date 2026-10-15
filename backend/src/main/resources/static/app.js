@@ -92,17 +92,111 @@ const app = {
             this.currentUser = data;
 
             this.updateHeaderProfile();
-            this.showToast(`Switched persona to ${data.fullName} (${data.role})`, 'info');
+            this.showToast(`Logged in as ${data.fullName} (${data.role})`, 'success');
             this.refreshCurrentTab();
             this.fetchNotifications();
+            this.closeModal('modal-auth');
         } catch (err) {
             console.error('Login error:', err);
             this.showToast('Failed to authenticate with server', 'error');
         }
     },
 
+    logout() {
+        this.token = null;
+        this.currentUser = null;
+        this.updateHeaderProfile();
+        this.showToast('You have been logged out successfully.', 'info');
+        this.refreshCurrentTab();
+    },
+
+    openAuthModal() {
+        this.openModal('modal-auth');
+    },
+
+    switchAuthMode(mode) {
+        const isLogin = mode === 'login';
+        document.getElementById('tab-auth-login').classList.toggle('active', isLogin);
+        document.getElementById('tab-auth-register').classList.toggle('active', !isLogin);
+        document.getElementById('form-login').classList.toggle('hidden', !isLogin);
+        document.getElementById('form-register').classList.toggle('hidden', isLogin);
+        document.getElementById('auth-modal-title').innerText = isLogin ? 'Log In to EscrowFlow' : 'Create an Account';
+    },
+
+    async submitLogin() {
+        const email = document.getElementById('login-email').value;
+        const pass = document.getElementById('login-password').value;
+        if (!email || !pass) {
+            this.showToast('Please enter both email and password', 'error');
+            return;
+        }
+        await this.login(email, pass);
+    },
+
+    async submitRegister() {
+        const fullName = document.getElementById('reg-fullname').value;
+        const username = document.getElementById('reg-username').value;
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+        const role = document.getElementById('reg-role').value;
+
+        if (!fullName || !username || !email || !password) {
+            this.showToast('Please fill all registration fields', 'error');
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fullName, username, email, password, role })
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                this.showToast(err.error || 'Registration failed', 'error');
+                return;
+            }
+
+            const data = await res.json();
+            this.token = data.token;
+            this.currentUser = data;
+            this.updateHeaderProfile();
+            this.showToast(`Account created! Welcome, ${data.fullName}`, 'success');
+            this.refreshCurrentTab();
+            this.fetchNotifications();
+            this.closeModal('modal-auth');
+        } catch (e) {
+            this.showToast('Failed to register account', 'error');
+        }
+    },
+
+    async quickDemo(email) {
+        const pass = this.demoAccounts[email] || 'password123';
+        await this.login(email, pass);
+    },
+
     updateHeaderProfile() {
-        if (!this.currentUser) return;
+        const roleSelector = document.getElementById('role-selector')?.parentElement;
+        const userPill = document.querySelector('.user-pill');
+        const balanceCard = document.getElementById('balance-card-box');
+        const logoutBtn = document.getElementById('btn-logout');
+        const loginTrigger = document.getElementById('btn-login-trigger');
+
+        if (!this.currentUser) {
+            if (roleSelector) roleSelector.style.display = 'none';
+            if (userPill) userPill.style.display = 'none';
+            if (balanceCard) balanceCard.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+            if (loginTrigger) loginTrigger.classList.remove('hidden');
+            return;
+        }
+
+        if (roleSelector) roleSelector.style.display = 'flex';
+        if (userPill) userPill.style.display = 'flex';
+        if (balanceCard) balanceCard.style.display = 'flex';
+        if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+        if (loginTrigger) loginTrigger.classList.add('hidden');
 
         document.getElementById('user-name').innerText = this.currentUser.fullName || this.currentUser.username;
         document.getElementById('user-avatar').innerText = (this.currentUser.username || 'U')[0].toUpperCase();
@@ -115,12 +209,14 @@ const app = {
 
         // Update role action hint
         const hint = document.getElementById('role-action-hint');
-        if (this.currentUser.role === 'CLIENT') {
-            hint.innerHTML = '<strong>Client Mode:</strong> You have the exclusive authority to Approve deliverables (releases funds) or Request revisions.';
-        } else if (this.currentUser.role === 'FREELANCER') {
-            hint.innerHTML = '<strong>Freelancer Mode:</strong> Submit deliverables with URL/proof for pending milestones. Payments are released upon client acceptance.';
-        } else {
-            hint.innerHTML = '<strong>Admin Mode:</strong> Oversight and platform audit access enabled.';
+        if (hint) {
+            if (this.currentUser.role === 'CLIENT') {
+                hint.innerHTML = '<strong>Client Mode:</strong> You have the exclusive authority to Approve deliverables (releases funds) or Request revisions.';
+            } else if (this.currentUser.role === 'FREELANCER') {
+                hint.innerHTML = '<strong>Freelancer Mode:</strong> Submit deliverables with URL/proof for pending milestones. Payments are released upon client acceptance.';
+            } else {
+                hint.innerHTML = '<strong>Admin Mode:</strong> Oversight and platform audit access enabled.';
+            }
         }
 
         // Hide/show post job button based on role
